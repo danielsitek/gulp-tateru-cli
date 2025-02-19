@@ -18,27 +18,36 @@ module.exports = (options = {}) => {
       return;
     }
 
-    const contentsJson = JSON.parse(file.contents.toString());
+    const contentsConfig = file.contents.toString();
 
-    const generatedFiles = core({
-      config: contentsJson,
-      env: opts.env,
-      lang: opts.lang,
-      page: opts.page,
-      cwd: file.cwd,
-    });
+    try {
+      JSON.parse(contentsConfig);
+    } catch (error) {
+      callback(new PluginError(PLUGIN_NAME, 'Invalid JSON config file'));
+      return;
+    }
 
-    generatedFiles.forEach((generatedFile) => {
-      console.log('name', generatedFile.base);
-      console.log('path', generatedFile.path);
+    try {
+      const contentsJson = JSON.parse(contentsConfig);
 
-      const vinylFile = new Vinyl({
-        ...generatedFile,
-        contents: Buffer.from(generatedFile.contents),
+      core({
+        config: contentsJson,
+        env: opts.env,
+        lang: opts.lang,
+        page: opts.page,
+        cwd: file.cwd,
+      }).forEach((generatedFile) => {
+        const vinylFile = new Vinyl({
+          ...generatedFile,
+          contents: Buffer.from(generatedFile.contents),
+        });
+
+        this.push(vinylFile);
       });
-
-      this.push(vinylFile);
-    });
+    } catch (error) {
+      callback(new PluginError(PLUGIN_NAME, error));
+      return;
+    }
 
     callback();
   });
