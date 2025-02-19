@@ -7,7 +7,7 @@ const PLUGIN_NAME = 'gulp-tateru';
 
 module.exports = (options = {}) => {
   return through.obj(function (file, encoding, callback) {
-    let opts = Object.assign({}, options || {});
+    const pluginOptions = { ...options };
 
     if (file.isNull()) {
       return callback(null, file);
@@ -32,13 +32,14 @@ module.exports = (options = {}) => {
 
       core({
         config: contentsJson,
-        env: opts.env,
-        lang: opts.lang,
-        page: opts.page,
+        env: pluginOptions.env,
+        lang: pluginOptions.lang,
+        page: pluginOptions.page,
         cwd: file.cwd,
       }).forEach((generatedFile) => {
         const vinylFile = new Vinyl({
           ...generatedFile,
+          base: file.base,
           contents: Buffer.from(generatedFile.contents),
         });
 
