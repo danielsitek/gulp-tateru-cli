@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.types.json && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
-    "reinstall": "npm uninstall tateru-cli && npm i ../tateru-cli/tateru-cli-1.4.0.tgz",
+    "reinstall": "npm uninstall tateru-cli && rm -rf node_modules && npm i ../tateru-cli/tateru-cli-1.4.0.tgz",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
