@@ -1,0 +1,41 @@
+{
+  "name": "@tateru/gulp-tateru",
+  "version": "0.1.0",
+  "main": "/lib/cjs/index.js",
+  "files": [
+    "package.json",
+    "README.md",
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.types.json && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
+    "reinstall": "npm uninstall tateru-cli && npm i ../tateru-cli/tateru-cli-1.4.0.tgz",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "plugin-error": "^2.0.1",
+    "tateru-cli": "file:../tateru-cli/tateru-cli-1.4.0.tgz",
+    "through2": "^4.0.2",
+    "vinyl": "^3.0.0"
+  },
+  "devDependencies": {
+    "@tateru/gulp-tateru": "file:tateru-gulp-tateru-0.1.0.tgz",
+    "@types/node": "20.11",
+    "@types/through2": "^2.0.41",
+    "@types/vinyl": "^2.0.12",
+    "gulp": "^5.0.0",
+    "gulp-rename": "^2.0.0",
+    "typescript": "^5.7.3"
+  },
+  "exports": {
+    "require": "./lib/cjs/index.js",
+    "import": "./lib/esm/index.js"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "types": "./lib/index.d.ts"
+}

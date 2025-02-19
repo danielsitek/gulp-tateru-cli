@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig to read more about this file */
+
+    "target": "es2016",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "lib",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["src/types/*"],
+      "plugin-error": ["node_modules/plugin-error"]
+    },
+    "lib": ["ESNext"],
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*"]
+}
