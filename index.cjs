@@ -5,7 +5,7 @@ const { core } = require('tateru-cli');
 
 const PLUGIN_NAME = 'gulp-tateru';
 
-module.exports = (options = {}) => {
+const gulpTateru = (options = {}) => {
   return through.obj(function (file, encoding, callback) {
     const pluginOptions = { ...options };
 
@@ -52,4 +52,8 @@ module.exports = (options = {}) => {
 
     callback();
   });
+};
+
+module.exports = {
+  gulpTateru,
 };

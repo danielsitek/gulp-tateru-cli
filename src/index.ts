@@ -1,46 +1,21 @@
-import path from 'path';
 import PluginError from 'plugin-error';
+import { core, type Environment } from 'tateru-cli';
 import through from 'through2';
 import Vinyl from 'vinyl';
 
 export interface GulpTateruOptions {
-  env?: string;
+  env?: Environment;
   lang?: string;
   page?: string;
-}
-
-export interface TateruFile {
-  contents: Buffer;
-  base: string;
-  path: string;
+  formatter?: (contents: string, fileType?: string) => string;
+  minify?: (contents: string, fileType?: string) => string;
 }
 
 const PLUGIN_NAME = 'gulp-tateru';
 
-/**
- * Mock tateru builder. Pass config file content and return an array of files as strings.
- * @param content
- * @returns
- */
-const mockTateruBuilder = (content: string): TateruFile[] => {
-  const files = [];
-
-  for (let i = 0; i < 10; i++) {
-    const newContent = `This is a #${i} generated file with content:\n\n${content}`;
-
-    files.push({
-      contents: Buffer.from(newContent),
-      base: `file-${i}.txt`,
-      path: ``,
-    });
-  }
-
-  return files;
-};
-
-export const gulpTateru = (options?: GulpTateruOptions) => {
+export const gulpTateru = (options: GulpTateruOptions = {}) => {
   return through.obj(function (file, encoding, callback) {
-    let opts = Object.assign({}, options || {});
+    const pluginOptions = { ...options };
 
     if (file.isNull()) {
       return callback(null, file);
@@ -51,29 +26,35 @@ export const gulpTateru = (options?: GulpTateruOptions) => {
       return;
     }
 
-    const fileName = path.basename(file.path);
-    const filePath = file.path;
-    const contents = file.contents.toString();
+    const contentsConfig = file.contents.toString();
 
-    console.log('fileName', fileName);
-    console.log('filePath', filePath);
-    // console.log('contents', contents);
+    try {
+      JSON.parse(contentsConfig);
+    } catch (error) {
+      callback(new PluginError(PLUGIN_NAME, 'Invalid JSON config file'));
+      return;
+    }
 
-    const generatedFiles = mockTateruBuilder(contents);
+    try {
+      const contentsJson = JSON.parse(contentsConfig);
 
-    generatedFiles.forEach((generatedFile) => {
-      console.log('name', generatedFile.base);
-      console.log('path', generatedFile.path);
-
-      const vinylFile = new Vinyl({
+      core({
+        ...pluginOptions,
+        config: contentsJson,
         cwd: file.cwd,
-        base: file.base,
-        path: path.join(file.base, generatedFile.base),
-        contents: generatedFile.contents,
-      });
+      }).forEach((generatedFile) => {
+        const vinylFile = new Vinyl({
+          ...generatedFile,
+          base: file.base,
+          contents: Buffer.from(generatedFile.contents),
+        });
 
-      this.push(vinylFile);
-    });
+        this.push(vinylFile);
+      });
+    } catch (error) {
+      callback(new PluginError(PLUGIN_NAME, error as Error));
+      return;
+    }
 
     callback();
   });
