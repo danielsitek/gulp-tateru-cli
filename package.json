@@ -1,5 +1,5 @@
 {
-  "name": "@tateru/gulp-tateru",
+  "name": "gulp-tateru",
   "version": "0.1.0",
   "main": "/lib/cjs/index.js",
   "files": [
@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.types.json && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
     "reinstall": "npm uninstall tateru-cli && rm -rf node_modules && npm i ../tateru-cli/tateru-cli-1.4.0.tgz",
+    "prepack": "rm -rf lib && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -22,12 +23,10 @@
     "vinyl": "^3.0.0"
   },
   "devDependencies": {
-    "@tateru/gulp-tateru": "file:tateru-gulp-tateru-0.1.0.tgz",
     "@types/node": "20.11",
     "@types/through2": "^2.0.41",
     "@types/vinyl": "^2.0.12",
     "gulp": "^5.0.0",
-    "gulp-rename": "^2.0.0",
     "typescript": "^5.7.3"
   },
   "exports": {
