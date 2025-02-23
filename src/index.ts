@@ -3,18 +3,65 @@ import { core, type Environment } from 'tateru-cli';
 import through from 'through2';
 import Vinyl from 'vinyl';
 
+/**
+ * Formatter function type
+ *
+ * @param contents - The contents of the file to format.
+ * @param fileType - The file type to format. Example: 'html', 'json', 'webmanifest', etc.
+ */
+export type Formatter = (
+  contents: string,
+  fileType?: string
+) => Promise<string>;
+
+/**
+ * Minify function type
+ *
+ * @param contents - The contents of the file to minify.
+ * @param fileType - The file type to minify. Example: 'html', 'json', 'webmanifest', etc.
+ */
+export type Minify = (contents: string, fileType?: string) => Promise<string>;
+
+/**
+ * Gulp Tateru Options
+ */
 export interface GulpTateruOptions {
+  /**
+   * The environment to use from `tateru.config.json`. Example: `dev`, `prod`.
+   */
   env?: Environment;
+
+  /**
+   * The language to use from `tateru.config.json` for the generated files. Example: 'en', 'fr', 'es', etc.
+   */
   lang?: string;
+
+  /**
+   * The page to use from `tateru.config.json` for the generated files. Example: 'home', 'about', 'contact', etc.
+   */
   page?: string;
-  formatter?: (contents: string, fileType?: string) => string;
-  minify?: (contents: string, fileType?: string) => string;
+
+  /**
+   * The formatter function to use for formatting the generated files, before minification.
+   */
+  formatter?: Formatter;
+
+  /**
+   * The minify function to use for minifying the generated files.
+   */
+  minify?: Minify;
 }
 
 const PLUGIN_NAME = 'gulp-tateru';
 
+/**
+ * Gulp Plugin for Tateru CLI.
+ *
+ * @param options - The options to use for the plugin.
+ * @returns - Pipe Stream.
+ */
 export const gulpTateru = (options: GulpTateruOptions = {}) => {
-  return through.obj(function (file, encoding, callback) {
+  return through.obj(async function (file, encoding, callback) {
     const pluginOptions = { ...options };
 
     if (file.isNull()) {
@@ -22,8 +69,7 @@ export const gulpTateru = (options: GulpTateruOptions = {}) => {
     }
 
     if (file.isStream()) {
-      callback(new PluginError(PLUGIN_NAME, 'Streaming not supported'));
-      return;
+      return callback(new PluginError(PLUGIN_NAME, 'Streaming not supported'));
     }
 
     const contentsConfig = file.contents.toString();
@@ -31,29 +77,31 @@ export const gulpTateru = (options: GulpTateruOptions = {}) => {
     try {
       JSON.parse(contentsConfig);
     } catch (error) {
-      callback(new PluginError(PLUGIN_NAME, 'Invalid JSON config file'));
-      return;
+      return callback(new PluginError(PLUGIN_NAME, 'Invalid JSON config file'));
     }
 
     try {
       const contentsJson = JSON.parse(contentsConfig);
 
-      core({
+      const files = await core({
         ...pluginOptions,
         config: contentsJson,
         cwd: file.cwd,
-      }).forEach((generatedFile) => {
-        const vinylFile = new Vinyl({
-          ...generatedFile,
-          base: file.base,
-          contents: Buffer.from(generatedFile.contents),
-        });
-
-        this.push(vinylFile);
       });
+
+      await Promise.all(
+        files.map(async (generatedFile) => {
+          const vinylFile = new Vinyl({
+            ...generatedFile,
+            base: file.base,
+            contents: Buffer.from(generatedFile.contents),
+          });
+
+          this.push(vinylFile);
+        })
+      );
     } catch (error) {
-      callback(new PluginError(PLUGIN_NAME, error as Error));
-      return;
+      return callback(new PluginError(PLUGIN_NAME, error as Error));
     }
 
     callback();
