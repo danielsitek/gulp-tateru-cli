@@ -7,13 +7,23 @@
     "README.md",
     "lib"
   ],
+  "keywords": [
+    "gulp",
+    "tateru",
+    "tateru-cli",
+    "gulpplugin"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.types.json && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
     "reinstall": "npm uninstall tateru-cli && rm -rf node_modules && npm i ../tateru-cli/tateru-cli-1.4.0.tgz",
     "prepack": "rm -rf lib && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": {
+    "name": "Daniel Sitek",
+    "email": "dan.sitek@gmail.com",
+    "url": "https://danielsitek.cz"
+  },
   "license": "MIT",
   "description": "",
   "dependencies": {
