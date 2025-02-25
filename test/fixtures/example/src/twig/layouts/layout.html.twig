@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{- title -}}</title>
+    </head>
+
+    <body>
+        <header>
+            <h1>My Site</h1>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <section>
+            {% block content %}{% endblock %}
+        </section>
+
+        <footer>
+            &copy; 2025 My Site
+        </footer>
+    </body>
+</html>

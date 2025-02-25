@@ -17,7 +17,7 @@
     "build": "tsc -p tsconfig.types.json && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
     "reinstall": "npm uninstall tateru-cli && rm -rf node_modules && npm i ../tateru-cli/tateru-cli-1.4.0.tgz",
     "prepack": "rm -rf lib && npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest"
   },
   "author": {
     "name": "Daniel Sitek",
@@ -37,7 +37,8 @@
     "@types/through2": "^2.0.41",
     "@types/vinyl": "^2.0.12",
     "gulp": "^5.0.0",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
   },
   "exports": {
     "require": "./lib/cjs/index.js",
