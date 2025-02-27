@@ -13,6 +13,14 @@
     "tateru-cli",
     "gulpplugin"
   ],
+  "homepage": "https://github.com/danielsitek/gulp-tateru#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielsitek/gulp-tateru.git"
+  },
+  "bugs": {
+    "url": "https://github.com/danielsitek/gulp-tateru/issues"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.types.json && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
     "reinstall": "npm uninstall tateru-cli && rm -rf node_modules && npm i ../tateru-cli/tateru-cli-1.4.0.tgz",
@@ -28,7 +36,7 @@
   "description": "",
   "dependencies": {
     "plugin-error": "^2.0.1",
-    "tateru-cli": "file:../tateru-cli/tateru-cli-1.4.0.tgz",
+    "tateru-cli": "^1.5.0",
     "through2": "^4.0.2",
     "vinyl": "^3.0.0"
   },
