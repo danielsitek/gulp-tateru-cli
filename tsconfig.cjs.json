@@ -4,6 +4,8 @@
   "compilerOptions": {
     "module": "CommonJS",
     "outDir": "./lib/cjs",
-    "declaration": true
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false
   }
 }

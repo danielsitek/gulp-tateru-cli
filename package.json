@@ -1,17 +1,21 @@
 {
   "name": "gulp-tateru",
+  "description": "Gulp plugin to build templates, using tateru-cli",
   "version": "0.1.0",
-  "main": "/lib/cjs/index.js",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
   "files": [
     "package.json",
     "README.md",
+    "LICENSE",
     "lib"
   ],
   "keywords": [
     "gulp",
     "tateru",
     "tateru-cli",
-    "gulpplugin"
+    "gulpplugin",
+    "typescript"
   ],
   "homepage": "https://github.com/danielsitek/gulp-tateru#readme",
   "repository": {
@@ -22,9 +26,12 @@
     "url": "https://github.com/danielsitek/gulp-tateru/issues"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.types.json && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json",
-    "reinstall": "npm uninstall tateru-cli && rm -rf node_modules && npm i ../tateru-cli/tateru-cli-1.4.0.tgz",
-    "prepack": "rm -rf lib && npm run build",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:types",
+    "clean": "rm -rf lib",
+    "prepack": "npm run clean && npm run build",
     "test": "vitest"
   },
   "author": {
@@ -33,7 +40,6 @@
     "url": "https://danielsitek.cz"
   },
   "license": "MIT",
-  "description": "",
   "dependencies": {
     "plugin-error": "^2.0.1",
     "tateru-cli": "^1.5.0",
@@ -49,8 +55,11 @@
     "vitest": "^3.0.7"
   },
   "exports": {
-    "require": "./lib/cjs/index.js",
-    "import": "./lib/esm/index.js"
+    ".": {
+      "types": "./lib/index.d.ts",
+      "require": "./lib/cjs/index.js",
+      "import": "./lib/esm/index.js"
+    }
   },
   "engines": {
     "node": ">=14"
