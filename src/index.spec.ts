@@ -1,4 +1,4 @@
-import { assert, expect, describe, it } from 'vitest';
+import { assert, describe, expect, it } from 'vitest';
 import { gulpTateru } from './index';
 const gulp = require('gulp');
 
@@ -31,7 +31,7 @@ describe('gulpTateru', () => {
       generatedFile: string;
     }>((resolve) => {
       let n = 0;
-      let generatedFile;
+      let generatedFile: string;
 
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })

@@ -1,5 +1,5 @@
 import PluginError from 'plugin-error';
-import { core, type Environment } from 'tateru-cli';
+import { type Environment, core } from 'tateru-cli';
 import through from 'through2';
 import Vinyl from 'vinyl';
 
@@ -61,7 +61,7 @@ const PLUGIN_NAME = 'gulp-tateru';
  * @returns - Pipe Stream.
  */
 export const gulpTateru = (options: GulpTateruOptions = {}) => {
-  return through.obj(async function (file, encoding, callback) {
+  return through.obj(async function (file, _, callback) {
     const pluginOptions = { ...options };
 
     if (file.isNull()) {
