@@ -150,7 +150,7 @@ describe('gulpTateru', () => {
   it('should handle invalid JSON config', async () => {
     const stream = gulpTateru();
 
-    // Vytvoříme mock objektu souboru s neplatným JSON
+    // Create a mock file object with invalid JSON
     const invalidFile = new Vinyl({
       path: 'invalid.json',
       contents: Buffer.from('{ invalid json }'),
@@ -160,7 +160,7 @@ describe('gulpTateru', () => {
       stream.once('error', resolve);
     });
 
-    // Zavoláme write() místo použití gulp.src()
+    // Call write() instead of using gulp.src()
     stream.write(invalidFile);
     stream.end();
 
