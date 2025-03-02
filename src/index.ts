@@ -1,5 +1,5 @@
 import PluginError from 'plugin-error';
-import { type Environment, core } from 'tateru-cli';
+import { type ConfigFile, type Environment, core } from 'tateru-cli';
 import through from 'through2';
 import Vinyl from 'vinyl';
 
@@ -63,6 +63,7 @@ const PLUGIN_NAME = 'gulp-tateru';
 export const gulpTateru = (options: GulpTateruOptions = {}) => {
   return through.obj(async function (file, _, callback) {
     const pluginOptions = { ...options };
+    let parsedConfig: ConfigFile;
 
     if (file.isNull()) {
       return callback(null, file);
@@ -75,17 +76,15 @@ export const gulpTateru = (options: GulpTateruOptions = {}) => {
     const contentsConfig = file.contents.toString();
 
     try {
-      JSON.parse(contentsConfig);
+      parsedConfig = JSON.parse(contentsConfig);
     } catch (error) {
       return callback(new PluginError(PLUGIN_NAME, 'Invalid JSON config file'));
     }
 
     try {
-      const contentsJson = JSON.parse(contentsConfig);
-
       const files = await core({
         ...pluginOptions,
-        config: contentsJson,
+        config: parsedConfig,
         cwd: file.cwd,
       });
 
