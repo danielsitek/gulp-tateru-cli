@@ -1,6 +1,7 @@
-import { assert, describe, expect, it } from 'vitest';
-import { type Formatter, gulpTateru, type Minify } from './index';
 import PluginError from 'plugin-error';
+import Vinyl from 'vinyl';
+import { assert, describe, expect, it } from 'vitest';
+import { type Formatter, type Minify, gulpTateru } from './index';
 const gulp = require('gulp');
 
 describe('gulpTateru', () => {
@@ -51,22 +52,19 @@ describe('gulpTateru', () => {
   });
 
   it('should generate files with specific language', async () => {
-    const { count, generatedFile } = await new Promise<{
+    const { count } = await new Promise<{
       count: number;
-      generatedFile: string;
     }>((resolve) => {
       let n = 0;
-      let generatedFile;
 
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })
         .pipe(gulpTateru({ lang: 'cs' }))
         .on('data', (file) => {
           n++;
-          generatedFile = file.contents.toString();
         })
         .on('end', () => {
-          resolve({ count: n, generatedFile });
+          resolve({ count: n });
         });
     });
 
@@ -79,7 +77,7 @@ describe('gulpTateru', () => {
       generatedFile: string;
     }>((resolve) => {
       let n = 0;
-      let generatedFile;
+      let generatedFile: string;
 
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })
@@ -110,7 +108,7 @@ describe('gulpTateru', () => {
     const { generatedFile } = await new Promise<{
       generatedFile: string;
     }>((resolve) => {
-      let generatedFile;
+      let generatedFile: string;
 
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })
@@ -132,7 +130,7 @@ describe('gulpTateru', () => {
     const { generatedFile } = await new Promise<{
       generatedFile: string;
     }>((resolve) => {
-      let generatedFile;
+      let generatedFile: string;
 
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })
@@ -149,22 +147,24 @@ describe('gulpTateru', () => {
   });
 
   // TODO: Fix this test
-  it.skip('should handle invalid JSON config', async () => {
-    const error = await new Promise((resolve) => {
-      try {
-        gulp
-          .src('./invalid.tateru.config.json', { cwd: 'test/fixtures' })
-          .pipe(gulpTateru())
-          .on('error', (err) => {
-            resolve(err);
-          })
-          .on('end', () => {});
-      } catch (error) {
-        // Silence error
-      }
+  it('should handle invalid JSON config', async () => {
+    const stream = gulpTateru();
+
+    // Vytvoříme mock objektu souboru s neplatným JSON
+    const invalidFile = new Vinyl({
+      path: 'invalid.json',
+      contents: Buffer.from('{ invalid json }'),
     });
 
-    console.log(error);
+    const errorPromise = new Promise((resolve) => {
+      stream.once('error', resolve);
+    });
+
+    // Zavoláme write() místo použití gulp.src()
+    stream.write(invalidFile);
+    stream.end();
+
+    const error = await errorPromise;
 
     expect(error).toBeInstanceOf(PluginError);
     expect((error as PluginError).message).toContain(
