@@ -1,5 +1,5 @@
 import { assert, describe, expect, it } from 'vitest';
-import { gulpTateru } from './index';
+import { type Formatter, gulpTateru, type Minify } from './index';
 import PluginError from 'plugin-error';
 const gulp = require('gulp');
 
@@ -103,6 +103,51 @@ describe('gulpTateru', () => {
     expect(generatedFile).toContain('<h2>Page Homepage</h2>');
   });
 
+  it('should apply formatter function', async () => {
+    const formatter: Formatter = async (contents, fileType) =>
+      `FORMATTED (${fileType}): ${contents}`;
+
+    const { generatedFile } = await new Promise<{
+      generatedFile: string;
+    }>((resolve) => {
+      let generatedFile;
+
+      gulp
+        .src('./tateru.config.json', { cwd: 'test/fixtures' })
+        .pipe(gulpTateru({ formatter, page: 'about' }))
+        .on('data', (file) => {
+          generatedFile = file.contents.toString();
+        })
+        .on('end', () => {
+          resolve({ generatedFile });
+        });
+    });
+
+    expect(generatedFile).toContain('FORMATTED (html):');
+  });
+
+  it('should apply minify function', async () => {
+    const minify: Minify = async (contents) => contents.replace(/\s+/g, '');
+
+    const { generatedFile } = await new Promise<{
+      generatedFile: string;
+    }>((resolve) => {
+      let generatedFile;
+
+      gulp
+        .src('./tateru.config.json', { cwd: 'test/fixtures' })
+        .pipe(gulpTateru({ minify, page: 'about', env: 'prod' }))
+        .on('data', (file) => {
+          generatedFile = file.contents.toString();
+        })
+        .on('end', () => {
+          resolve({ generatedFile });
+        });
+    });
+
+    expect(generatedFile).not.toMatch(/\s+/);
+  });
+
   // TODO: Fix this test
   it.skip('should handle invalid JSON config', async () => {
     const error = await new Promise((resolve) => {
@@ -128,7 +173,6 @@ describe('gulpTateru', () => {
   });
 
   it('should handle streaming error', async () => {
-    // Simulace streamu pomocí mock objektu
     const mockStreamFile = {
       isNull: () => false,
       isStream: () => true,
