@@ -2,6 +2,7 @@
 
 ![Build Status](https://github.com/danielsitek/gulp-tateru/actions/workflows/dev.yml/badge.svg?branch=main)
 ![Codecov](https://img.shields.io/codecov/c/gh/danielsitek/gulp-tateru)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/danielsitek/gulp-tateru)
 
 > [gulp](http://gulpjs.com/) plugin to build templates, using [tateru-cli](https://github.com/danielsitek/tateru-cli)
 
