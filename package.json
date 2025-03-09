@@ -17,13 +17,13 @@
     "gulpplugin",
     "typescript"
   ],
-  "homepage": "https://github.com/danielsitek/gulp-tateru#readme",
+  "homepage": "https://github.com/danielsitek/gulp-tateru-cli#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danielsitek/gulp-tateru.git"
+    "url": "git+https://github.com/danielsitek/gulp-tateru-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/danielsitek/gulp-tateru/issues"
+    "url": "https://github.com/danielsitek/gulp-tateru-cli/issues"
   },
   "scripts": {
     "build:cjs": "tsc -p tsconfig.cjs.json",
