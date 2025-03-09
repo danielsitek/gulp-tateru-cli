@@ -25,7 +25,7 @@ export type Minify = (contents: string, fileType?: string) => Promise<string>;
 /**
  * Gulp Tateru Options
  */
-export interface GulpTateruOptions {
+export interface GulpTateruCliOptions {
   /**
    * The environment to use from `tateru.config.json`. Example: `dev`, `prod`.
    */
@@ -52,7 +52,7 @@ export interface GulpTateruOptions {
   minify?: Minify;
 }
 
-const PLUGIN_NAME = 'gulp-tateru';
+const PLUGIN_NAME = 'gulp-tateru-cli';
 
 /**
  * Gulp Plugin for Tateru CLI.
@@ -60,7 +60,7 @@ const PLUGIN_NAME = 'gulp-tateru';
  * @param options - The options to use for the plugin.
  * @returns - Pipe Stream.
  */
-export const gulpTateru = (options: GulpTateruOptions = {}) => {
+export const gulpTateruCli = (options: GulpTateruCliOptions = {}) => {
   return through.obj(async function (file, _, callback) {
     const pluginOptions = { ...options };
     let parsedConfig: ConfigFile;

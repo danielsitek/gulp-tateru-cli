@@ -1,12 +1,12 @@
 import PluginError from 'plugin-error';
 import Vinyl from 'vinyl';
 import { assert, describe, expect, it } from 'vitest';
-import { type Formatter, type Minify, gulpTateru } from './index';
+import { type Formatter, type Minify, gulpTateruCli } from './index';
 const gulp = require('gulp');
 
 describe('gulpTateru', () => {
   it('should be a function', () => {
-    assert.isFunction(gulpTateru);
+    assert.isFunction(gulpTateruCli);
   });
 
   it('should generate files', async () => {
@@ -15,7 +15,7 @@ describe('gulpTateru', () => {
 
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })
-        .pipe(gulpTateru())
+        .pipe(gulpTateruCli())
         .on('data', () => {
           n++;
         })
@@ -37,7 +37,7 @@ describe('gulpTateru', () => {
 
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })
-        .pipe(gulpTateru({ page: 'about' }))
+        .pipe(gulpTateruCli({ page: 'about' }))
         .on('data', (file) => {
           n++;
           generatedFile = file.contents.toString();
@@ -59,7 +59,7 @@ describe('gulpTateru', () => {
 
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })
-        .pipe(gulpTateru({ lang: 'cs' }))
+        .pipe(gulpTateruCli({ lang: 'cs' }))
         .on('data', (file) => {
           n++;
         })
@@ -82,7 +82,7 @@ describe('gulpTateru', () => {
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })
         .pipe(
-          gulpTateru({
+          gulpTateruCli({
             env: 'prod',
             lang: 'cs',
             page: 'index',
@@ -112,7 +112,7 @@ describe('gulpTateru', () => {
 
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })
-        .pipe(gulpTateru({ formatter, page: 'about' }))
+        .pipe(gulpTateruCli({ formatter, page: 'about' }))
         .on('data', (file) => {
           generatedFile = file.contents.toString();
         })
@@ -134,7 +134,7 @@ describe('gulpTateru', () => {
 
       gulp
         .src('./tateru.config.json', { cwd: 'test/fixtures' })
-        .pipe(gulpTateru({ minify, page: 'about', env: 'prod' }))
+        .pipe(gulpTateruCli({ minify, page: 'about', env: 'prod' }))
         .on('data', (file) => {
           generatedFile = file.contents.toString();
         })
@@ -148,7 +148,7 @@ describe('gulpTateru', () => {
 
   // TODO: Fix this test
   it('should handle invalid JSON config', async () => {
-    const stream = gulpTateru();
+    const stream = gulpTateruCli();
 
     // Create a mock file object with invalid JSON
     const invalidFile = new Vinyl({
@@ -179,7 +179,7 @@ describe('gulpTateru', () => {
     };
 
     const error = await new Promise((resolve) => {
-      const stream = gulpTateru();
+      const stream = gulpTateruCli();
       stream.on('error', (err) => {
         resolve(err);
       });
