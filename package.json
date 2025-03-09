@@ -1,5 +1,5 @@
 {
-  "name": "gulp-tateru",
+  "name": "gulp-tateru-cli",
   "description": "Gulp plugin to build templates, using tateru-cli",
   "version": "0.1.0",
   "main": "lib/cjs/index.js",
