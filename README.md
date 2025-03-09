@@ -1,8 +1,8 @@
-# gulp-tateru
+# gulp-tateru-cli
 
-![Build Status](https://github.com/danielsitek/gulp-tateru/actions/workflows/dev.yml/badge.svg?branch=main)
-![Codecov](https://img.shields.io/codecov/c/gh/danielsitek/gulp-tateru)
-![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/danielsitek/gulp-tateru)
+![Build Status](https://github.com/danielsitek/gulp-tateru-cli/actions/workflows/dev.yml/badge.svg?branch=main)
+![Codecov](https://img.shields.io/codecov/c/gh/danielsitek/gulp-tateru-cli)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/danielsitek/gulp-tateru-cli)
 
 > [gulp](http://gulpjs.com/) plugin to build templates, using [tateru-cli](https://github.com/danielsitek/tateru-cli)
 
@@ -18,7 +18,7 @@ Simple [gulp](https://github.com/gulpjs/gulp) plugin for streamlining integratio
 ## Install
 
 ```
-npm i -D gulp-tateru
+npm i -D gulp-tateru-cli
 ```
 
 ## Usage
@@ -46,13 +46,13 @@ For correct resolving destination through pipe, set `options.ext` to empty strin
 
 ```javascript
 const gulp = require("gulp");
-const { gulpTateru } = require("gulp-tateru");
+const { gulpTateruCli } = require("gulp-tateru-cli");
 
 const build = function build() {
   return src(["tateru.config.json"], {
     cwd: ".",
   })
-    .pipe(gulpTateru())
+    .pipe(gulpTateruCli())
     .pipe(dest("dist"));
 };
 ```
@@ -61,8 +61,9 @@ const build = function build() {
 
 ```javascript
 const gulp = require("gulp");
-const { gulpTateru } = require("gulp-tateru");
+const { gulpTateruCli } = require("gulp-tateru-cli");
 
+/** @type {import('gulp-tateru-cli').GulpTateruCliOptions} */
 const options = {
   env: "prod",
   lang: "cs",
@@ -72,7 +73,7 @@ const build = function build() {
   return src(["tateru.config.json"], {
     cwd: ".",
   })
-    .pipe(gulpTateru(options))
+    .pipe(gulpTateruCli(options))
     .pipe(dest("dist"));
 };
 ```
@@ -81,9 +82,10 @@ const build = function build() {
 
 ```javascript
 const gulp = require("gulp");
-const { gulpTateru } = require("gulp-tateru");
+const { gulpTateruCli } = require("gulp-tateru-cli");
 const { html, js } = require("js-beautify");
 
+/** @type {import('gulp-tateru-cli').Formatter} */
 const formatContents = (contents, fileType) => {
   if (fileType && ["html", "xml"].includes(fileType)) {
     return html(contents, {
@@ -100,6 +102,7 @@ const formatContents = (contents, fileType) => {
   return contents;
 };
 
+/** @type {import('gulp-tateru-cli').GulpTateruCliOptions} */
 const options = {
   formatter: formatContents,
 };
@@ -108,7 +111,7 @@ const build = function build() {
   return src(["tateru.config.json"], {
     cwd: ".",
   })
-    .pipe(gulpTateru(options))
+    .pipe(gulpTateruCli(options))
     .pipe(dest("dist"));
 };
 ```
