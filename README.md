@@ -30,17 +30,16 @@ For further documentation about using [tateru-cli](https://github.com/danielsite
 For correct resolving destination through pipe, set `options.ext` to empty string in `tateru.config.json`.
 
 ```json
-/** @file tateru.config.json */
 {
-  // Rest of config file
   "options": {
     "data": {},
     "src": "example/src/twig",
     "ext": ""
   }
-  // Rest of config file
 }
 ```
+
+You can find example of a while file in fixtures: `test/fixtures/tateru.config.json`.
 
 ### Basic usage
 
@@ -144,7 +143,7 @@ formatter?: (contents: string, fileType?: string) => string;
 
 Optional. The formatter function to use for formatting the generated files, before minification.
 
-- `contents` - The contents of the file to minify.
+- `contents` - The contents of the file to format.
 - `fileType` - The file type to minify. Example: 'html', 'json', 'webmanifest', etc.
 
 ```ts
