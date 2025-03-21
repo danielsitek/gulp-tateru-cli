@@ -8,7 +8,7 @@
 
 ## Issues
 
-Simple [gulp](https://github.com/gulpjs/gulp) plugin for streamlining integration of the [tateru-cli](https://github.com/danielsitek/tateru-cli) into gulp workflow. If it looks like you are having issues related to file generation, please contact [tateru-cli issues](https://github.com/danielsitek/tateru-cli/issues). Only create a new issue if it looks like you're having a problem with the plugin itself.
+Simple [gulp](https://github.com/gulpjs/gulp) plugin for streamlining integration of the [tateru-cli](https://github.com/danielsitek/tateru-cli) into gulp workflow. If you encounter problems related to file generation, please report them in the [tateru-cli issues](https://github.com/danielsitek/tateru-cli/issues). Only create a new issue if it looks like you're having a problem with the plugin itself.
 
 ## Requirements
 
@@ -23,7 +23,7 @@ npm i -D gulp-tateru-cli
 
 ## Usage
 
-For further documentation about using [tateru-cli](https://github.com/danielsitek/tateru-cli), please look for it's [documentation](https://github.com/danielsitek/tateru-cli/blob/master/README.md).
+For further documentation about using [tateru-cli](https://github.com/danielsitek/tateru-cli), please look for its [documentation](https://github.com/danielsitek/tateru-cli/blob/master/README.md). For further documentation about using [Gulp](https://gulpjs.com/), please look for its [documentation](https://gulpjs.com/docs/en/getting-started/quick-start).
 
 ### Requirements
 
@@ -39,12 +39,12 @@ For correct resolving destination through pipe, set `options.ext` to empty strin
 }
 ```
 
-You can find example of a while file in fixtures: `test/fixtures/tateru.config.json`.
+You can find an example of a complete file in the fixtures: [`test/fixtures/tateru.config.json`](./test/fixtures/tateru.config.json).
 
 ### Basic usage
 
 ```javascript
-const gulp = require("gulp");
+const { src, dest } = require("gulp");
 const { gulpTateruCli } = require("gulp-tateru-cli");
 
 const build = function build() {
@@ -58,8 +58,10 @@ const build = function build() {
 
 ### With options
 
+Plugin [gulp-tateru-cli](https://github.com/danielsitek/gulp-tateru-cli) supports TypeScript, so you can use type annotations in your gulp files for better type safety and developer experience.
+
 ```javascript
-const gulp = require("gulp");
+const { src, dest } = require("gulp");
 const { gulpTateruCli } = require("gulp-tateru-cli");
 
 /** @type {import('gulp-tateru-cli').GulpTateruCliOptions} */
@@ -80,7 +82,7 @@ const build = function build() {
 ### Format contents
 
 ```javascript
-const gulp = require("gulp");
+const { src, dest } = require("gulp");
 const { gulpTateruCli } = require("gulp-tateru-cli");
 const { html, js } = require("js-beautify");
 
@@ -157,7 +159,7 @@ Optional. The minify function to use for minifying the generated files.
 
 ## Contributing
 
-Want to contribute? Feel free to open an **issue** or **pull request** on GitHub! 🚀
+Want to contribute? Feel free to open an **issue** or **pull request** on GitHub! 🚀 We welcome bug reports, feature requests, and code contributions.
 
 1. Fork the repo
 2. Create a new branch (`git checkout -b feature-branch`)
@@ -168,7 +170,7 @@ Want to contribute? Feel free to open an **issue** or **pull request** on GitHub
 
 ## Support
 
-If you have any questions or need help, feel free to open an issue on GitHub or contact the maintainers.
+If you have any questions or need help, feel free to open an issue on GitHub or contact me via [GitHub profile](https://github.com/danielsitek).
 
 ## License
 
