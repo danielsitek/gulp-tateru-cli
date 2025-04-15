@@ -2,7 +2,7 @@ import PluginError from 'plugin-error';
 import Vinyl from 'vinyl';
 import { assert, describe, expect, it } from 'vitest';
 import { type Formatter, type Minify, gulpTateruCli } from './index';
-const gulp = require('gulp');
+import gulp from 'gulp';
 
 describe('gulpTateru', () => {
   it('should be a function', () => {
