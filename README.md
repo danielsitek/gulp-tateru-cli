@@ -1,5 +1,7 @@
 # gulp-tateru-cli
 
+[![NPM Version](https://img.shields.io/npm/v/gulp-tateru-cli)](https://www.npmjs.com/package/gulp-tateru-cli)
+[![GitHub Release](https://img.shields.io/github/v/release/danielsitek/gulp-tateru-cli)](https://github.com/danielsitek/gulp-tateru-cli/releases)
 ![Build Status](https://github.com/danielsitek/gulp-tateru-cli/actions/workflows/dev.yml/badge.svg?branch=main)
 ![Codecov](https://img.shields.io/codecov/c/gh/danielsitek/gulp-tateru-cli)
 ![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/danielsitek/gulp-tateru-cli)
