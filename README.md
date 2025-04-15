@@ -2,6 +2,7 @@
 
 ![Build Status](https://github.com/danielsitek/gulp-tateru-cli/actions/workflows/dev.yml/badge.svg?branch=main)
 ![Codecov](https://img.shields.io/codecov/c/gh/danielsitek/gulp-tateru-cli)
+![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/danielsitek/gulp-tateru-cli)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/63bb300962e1454e9b173e00c89cf1fb)](https://app.codacy.com/gh/danielsitek/gulp-tateru-cli/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 > [gulp](http://gulpjs.com/) plugin to build templates, using [tateru-cli](https://github.com/danielsitek/tateru-cli)
