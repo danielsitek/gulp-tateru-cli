@@ -267,7 +267,7 @@ describe('gulpTateru', () => {
 
   it('should apply both formatter and minify functions together', async () => {
     const formatter: Formatter = async (contents, fileType) =>
-      `FORMATTED (${fileType}): ${contents}`;
+      await `FORMATTED (${fileType}): ${contents}`;
     const minify: Minify = async (contents) => contents.replace(/\s+/g, ' ');
 
     const { generatedFile } = await new Promise<{
@@ -298,9 +298,9 @@ describe('gulpTateru', () => {
   });
 
   it('should handle different file types correctly', async () => {
-    const formatterCalls: Array<{ contents: string; fileType: string }> = [];
+    const formatterCalls: { contents: string; fileType: string }[] = [];
     const formatter: Formatter = async (contents, fileType) => {
-      formatterCalls.push({ contents, fileType: fileType || 'unknown' });
+      await formatterCalls.push({ contents, fileType: fileType ?? 'unknown' });
       return contents;
     };
 
@@ -391,7 +391,7 @@ describe('gulpTateru', () => {
   });
 
   it('should handle async formatter and minify functions', async () => {
-    const formatter: Formatter = async (contents, fileType) => {
+    const formatter: Formatter = async (contents) => {
       // Simulate async operation
       await new Promise((resolve) => setTimeout(resolve, 1));
       return `ASYNC_FORMATTED: ${contents}`;
