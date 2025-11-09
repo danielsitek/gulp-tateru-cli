@@ -244,4 +244,189 @@ describe('gulpTateru', () => {
     expect(error).toBeInstanceOf(PluginError);
     expect((error as PluginError).plugin).toBe('gulp-tateru-cli');
   });
+
+  it('should work with env option independently', async () => {
+    const { count } = await new Promise<{
+      count: number;
+    }>((resolve) => {
+      let n = 0;
+
+      gulp
+        .src('./tateru.config.json', { cwd: 'test/fixtures' })
+        .pipe(gulpTateruCli({ env: 'dev' }))
+        .on('data', () => {
+          n++;
+        })
+        .on('end', () => {
+          resolve({ count: n });
+        });
+    });
+
+    expect(count).toBe(6);
+  });
+
+  it('should apply both formatter and minify functions together', async () => {
+    const formatter: Formatter = async (contents, fileType) =>
+      `FORMATTED (${fileType}): ${contents}`;
+    const minify: Minify = async (contents) => contents.replace(/\s+/g, ' ');
+
+    const { generatedFile } = await new Promise<{
+      generatedFile: string;
+    }>((resolve) => {
+      let generatedFile: string;
+
+      gulp
+        .src('./tateru.config.json', { cwd: 'test/fixtures' })
+        .pipe(
+          gulpTateruCli({
+            formatter,
+            minify,
+            page: 'about',
+            env: 'prod',
+          })
+        )
+        .on('data', (file) => {
+          generatedFile = file.contents.toString();
+        })
+        .on('end', () => {
+          resolve({ generatedFile });
+        });
+    });
+
+    expect(generatedFile).toContain('FORMATTED (html):');
+    expect(generatedFile).not.toMatch(/\s{2,}/); // No multiple spaces
+  });
+
+  it('should handle different file types correctly', async () => {
+    const formatterCalls: Array<{ contents: string; fileType: string }> = [];
+    const formatter: Formatter = async (contents, fileType) => {
+      formatterCalls.push({ contents, fileType: fileType || 'unknown' });
+      return contents;
+    };
+
+    await new Promise<void>((resolve) => {
+      gulp
+        .src('./tateru.config.json', { cwd: 'test/fixtures' })
+        .pipe(gulpTateruCli({ formatter }))
+        .on('data', () => {
+          // Just collect files
+        })
+        .on('end', () => {
+          resolve();
+        });
+    });
+
+    const fileTypes = formatterCalls.map((call) => call.fileType);
+    expect(fileTypes).toContain('html');
+    expect(fileTypes).toContain('txt');
+    expect(fileTypes).toContain('xml');
+    expect(fileTypes).toContain('webmanifest');
+  });
+
+  it('should set correct vinyl file properties', async () => {
+    const files: Vinyl[] = [];
+
+    await new Promise<void>((resolve) => {
+      gulp
+        .src('./tateru.config.json', { cwd: 'test/fixtures' })
+        .pipe(gulpTateruCli({ page: 'about' }))
+        .on('data', (file) => {
+          files.push(file);
+        })
+        .on('end', () => {
+          resolve();
+        });
+    });
+
+    expect(files).toHaveLength(1);
+    const file = files[0];
+
+    expect(file).toBeInstanceOf(Vinyl);
+    expect(file.contents).toBeInstanceOf(Buffer);
+    expect(file.path).toBeTruthy();
+    expect(file.base).toBeTruthy();
+    expect(file.cwd).toBeTruthy();
+  });
+
+  it('should handle nonexistent page gracefully', async () => {
+    const { count } = await new Promise<{
+      count: number;
+    }>((resolve) => {
+      let n = 0;
+
+      gulp
+        .src('./tateru.config.json', { cwd: 'test/fixtures' })
+        .pipe(gulpTateruCli({ page: 'nonexistent-page' }))
+        .on('data', () => {
+          n++;
+        })
+        .on('end', () => {
+          resolve({ count: n });
+        });
+    });
+
+    // Should generate 0 files for nonexistent page
+    expect(count).toBe(0);
+  });
+
+  it('should handle nonexistent language gracefully', async () => {
+    const { count } = await new Promise<{
+      count: number;
+    }>((resolve) => {
+      let n = 0;
+
+      gulp
+        .src('./tateru.config.json', { cwd: 'test/fixtures' })
+        .pipe(gulpTateruCli({ lang: 'nonexistent-lang' }))
+        .on('data', () => {
+          n++;
+        })
+        .on('end', () => {
+          resolve({ count: n });
+        });
+    });
+
+    // Should generate 0 files for nonexistent language
+    expect(count).toBe(0);
+  });
+
+  it('should handle async formatter and minify functions', async () => {
+    const formatter: Formatter = async (contents, fileType) => {
+      // Simulate async operation
+      await new Promise((resolve) => setTimeout(resolve, 1));
+      return `ASYNC_FORMATTED: ${contents}`;
+    };
+
+    const minify: Minify = async (contents) => {
+      // Simulate async operation
+      await new Promise((resolve) => setTimeout(resolve, 1));
+      return contents.replace(/\s+/g, '');
+    };
+
+    const { generatedFile } = await new Promise<{
+      generatedFile: string;
+    }>((resolve) => {
+      let generatedFile: string;
+
+      gulp
+        .src('./tateru.config.json', { cwd: 'test/fixtures' })
+        .pipe(
+          gulpTateruCli({
+            formatter,
+            minify,
+            page: 'about',
+            env: 'prod',
+          })
+        )
+        .on('data', (file) => {
+          generatedFile = file.contents.toString();
+        })
+        .on('end', () => {
+          resolve({ generatedFile });
+        });
+    });
+
+    expect(generatedFile).toContain('ASYNC_FORMATTED:');
+    expect(generatedFile).not.toMatch(/\s+/);
+  });
 });
