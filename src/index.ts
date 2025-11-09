@@ -62,7 +62,6 @@ const PLUGIN_NAME = 'gulp-tateru-cli';
  */
 export const gulpTateruCli = (options: GulpTateruCliOptions = {}) => {
   return through.obj(async function (file, _, callback) {
-    const pluginOptions = { ...options };
     let parsedConfig: ConfigFile;
 
     if (file.isNull()) {
@@ -83,7 +82,7 @@ export const gulpTateruCli = (options: GulpTateruCliOptions = {}) => {
 
     try {
       const files = await core({
-        ...pluginOptions,
+        ...options,
         config: parsedConfig,
         cwd: file.cwd,
       });
@@ -91,16 +90,19 @@ export const gulpTateruCli = (options: GulpTateruCliOptions = {}) => {
       await Promise.all(
         files.map(async (generatedFile) => {
           const vinylFile = new Vinyl({
-            ...generatedFile,
+            path: generatedFile.path,
+            cwd: generatedFile.cwd,
             base: file.base,
-            contents: Buffer.from(generatedFile.contents),
+            contents: Buffer.from(generatedFile.contents || ''),
           });
 
           this.push(vinylFile);
         })
       );
     } catch (error) {
-      return callback(new PluginError(PLUGIN_NAME, error as Error));
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      return callback(new PluginError(PLUGIN_NAME, errorMessage));
     }
 
     callback();
