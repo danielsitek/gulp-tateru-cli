@@ -189,4 +189,59 @@ describe('gulpTateru', () => {
     expect(error).toBeInstanceOf(PluginError);
     expect((error as PluginError).message).toContain('Streaming not supported');
   });
+
+  it('should handle null files by passing them through', async () => {
+    const stream = gulpTateruCli();
+    const nullFile = new Vinyl({
+      path: 'test.json',
+      contents: null,
+    });
+
+    const result = await new Promise((resolve) => {
+      stream.once('data', resolve);
+      stream.write(nullFile);
+      stream.end();
+    });
+
+    expect(result).toBe(nullFile);
+  });
+
+  it('should handle errors from core function', async () => {
+    const stream = gulpTateruCli();
+
+    // Create a config that will cause core() to fail
+    // Using an invalid cwd path should cause an error in core
+    const invalidConfigFile = new Vinyl({
+      path: 'test-config.json',
+      cwd: '/absolutely/nonexistent/path/that/should/cause/error',
+      base: '/test',
+      contents: Buffer.from(
+        JSON.stringify({
+          // Valid JSON structure but invalid paths/config for tateru-cli core
+          environments: {
+            dev: { minify: false },
+          },
+          translations: {},
+          pages: {
+            test: {
+              template: 'nonexistent.html.twig',
+              output: 'test.html',
+            },
+          },
+        })
+      ),
+    });
+
+    const errorPromise = new Promise((resolve) => {
+      stream.once('error', resolve);
+    });
+
+    stream.write(invalidConfigFile);
+    stream.end();
+
+    const error = await errorPromise;
+
+    expect(error).toBeInstanceOf(PluginError);
+    expect((error as PluginError).plugin).toBe('gulp-tateru-cli');
+  });
 });
