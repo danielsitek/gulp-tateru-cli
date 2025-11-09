@@ -45,16 +45,17 @@
     "plugin-error": "^2.0.1",
     "tateru-cli": "^1.5.0",
     "through2": "^4.0.2",
-    "vinyl": "^3.0.0"
+    "vinyl": "^3.0.1"
   },
   "devDependencies": {
-    "@types/node": "20.11",
+    "@types/gulp": "^4.0.18",
+    "@types/node": "^24.10.0",
     "@types/through2": "^2.0.41",
     "@types/vinyl": "^2.0.12",
-    "@vitest/coverage-v8": "^3.0.7",
-    "gulp": "^5.0.0",
-    "typescript": "^5.7.3",
-    "vitest": "^3.0.7"
+    "@vitest/coverage-v8": "^4.0.8",
+    "gulp": "^5.0.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.8"
   },
   "exports": {
     ".": {
@@ -64,7 +65,7 @@
     }
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=20"
   },
   "types": "./lib/index.d.ts"
 }
