@@ -301,7 +301,7 @@ describe('gulpTateru', () => {
     const formatterCalls: { contents: string; fileType: string }[] = [];
     const formatter: Formatter = async (contents, fileType) => {
       formatterCalls.push({ contents, fileType: fileType ?? 'unknown' });
-      return contents;
+      return Promise.resolve(contents);
     };
 
     await new Promise<void>((resolve) => {
