@@ -15,7 +15,7 @@ Simple [gulp](https://github.com/gulpjs/gulp) plugin for streamlining integratio
 
 ## Requirements
 
-- Node.js v14 or higher
+- Node.js v20 or higher
 - Gulp v4 or higher
 
 ## Install
