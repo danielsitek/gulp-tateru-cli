@@ -42,19 +42,19 @@
   },
   "license": "MIT",
   "dependencies": {
-    "plugin-error": "^2.0.1",
+    "plugin-error": "2.0.1",
     "tateru-cli": "1.6.0",
-    "through2": "^4.0.2",
-    "vinyl": "^3.0.1"
+    "through2": "4.0.2",
+    "vinyl": "3.0.1"
   },
   "devDependencies": {
-    "@types/gulp": "^4.0.18",
+    "@types/gulp": "4.0.18",
     "@types/node": "24.10.1",
-    "@types/through2": "^2.0.41",
-    "@types/vinyl": "^2.0.12",
+    "@types/through2": "2.0.41",
+    "@types/vinyl": "2.0.12",
     "@vitest/coverage-v8": "4.0.15",
-    "gulp": "^5.0.1",
-    "typescript": "^5.9.3",
+    "gulp": "5.0.1",
+    "typescript": "5.9.3",
     "vitest": "4.0.15"
   },
   "exports": {
