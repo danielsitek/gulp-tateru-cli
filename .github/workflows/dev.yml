@@ -7,6 +7,10 @@ on:
       - main
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build for Node ${{ matrix.node-version }}
@@ -16,6 +20,7 @@ jobs:
       contents: read
 
     strategy:
+      fail-fast: false
       matrix:
         node-version: [20, 22, 24]
 
@@ -27,6 +32,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
       - run: node --version
       - run: npm --version
@@ -51,6 +57,7 @@ jobs:
       contents: read
 
     strategy:
+      fail-fast: false
       matrix:
         node-version: [20, 22, 24]
 
@@ -62,6 +69,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
       - run: node --version
       - run: npm --version
@@ -92,6 +100,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
       - run: node --version
       - run: npm --version
