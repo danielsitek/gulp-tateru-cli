@@ -12,6 +12,9 @@ jobs:
     name: Build for Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     strategy:
       matrix:
         node-version: [20, 22, 24]
@@ -44,6 +47,9 @@ jobs:
     name: Run tests on Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     strategy:
       matrix:
         node-version: [20, 22, 24]
@@ -70,6 +76,9 @@ jobs:
     name: Generate coverage report on Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
     needs: "test"
+
+    permissions:
+      contents: read
 
     strategy:
       matrix:
