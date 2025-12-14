@@ -7,23 +7,32 @@ on:
       - main
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: Build for Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     strategy:
+      fail-fast: false
       matrix:
         node-version: [20, 22, 24]
 
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
       - run: node --version
       - run: npm --version
@@ -35,7 +44,7 @@ jobs:
         run: npm run build
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: lib-node-${{ matrix.node-version }}
           path: lib/
@@ -44,18 +53,23 @@ jobs:
     name: Run tests on Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+
     strategy:
+      fail-fast: false
       matrix:
         node-version: [20, 22, 24]
 
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
       - run: node --version
       - run: npm --version
@@ -71,18 +85,22 @@ jobs:
     runs-on: ubuntu-latest
     needs: "test"
 
+    permissions:
+      contents: read
+
     strategy:
       matrix:
         node-version: [24]
 
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
       - run: node --version
       - run: npm --version
@@ -99,7 +117,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Upload coverage artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-report
           path: coverage/
