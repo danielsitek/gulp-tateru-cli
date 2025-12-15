@@ -1,7 +1,7 @@
 {
   "name": "gulp-tateru-cli",
   "description": "Gulp plugin to build templates, using tateru-cli",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "files": [
