@@ -43,7 +43,7 @@
   "license": "MIT",
   "dependencies": {
     "plugin-error": "2.0.1",
-    "tateru-cli": "1.6.2",
+    "tateru-cli": "1.6.3",
     "through2": "4.0.2",
     "vinyl": "3.0.1"
   },
